@@ -845,3 +845,10 @@ p em{font-size:1.2em}
 
 /* far-ring chips can extend past the viewBox — let the svg breathe */
 .lattice{overflow:visible}
+
+/* dawn ledger — open / uncompleted task (needs a human decision) */
+.lrow--open{border-style:dashed;background:transparent}
+.lrow--open b{color:var(--signal);border-color:rgba(245,96,2,.45)}
+.is-dawn .lrow--open{background:rgba(245,96,2,.05);border-color:rgba(245,96,2,.45)}
+.is-dawn .lrow--open span{color:var(--ink)}
+.is-dawn .lrow--open b{background:transparent;color:var(--signal);border-color:rgba(245,96,2,.55)}

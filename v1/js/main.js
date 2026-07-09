@@ -366,9 +366,9 @@ function measure() {
   $$('[data-scrub]').forEach(el => {
     const stage = el.querySelector('.pin__stage');
     if (stage && getComputedStyle(stage).position !== 'sticky') {
-      pins[el.dataset.scrub] = { el, top: el.offsetTop - VH * 0.82, range: Math.max(el.offsetHeight, VH * 0.9) };
+      pins[el.dataset.scrub] = { el, top: el.offsetTop - VH * 0.82, range: Math.max(el.offsetHeight, VH * 0.9), pinned: false };
     } else {
-      pins[el.dataset.scrub] = { el, top: el.offsetTop, range: Math.max(el.offsetHeight - VH, 1) };
+      pins[el.dataset.scrub] = { el, top: el.offsetTop, range: Math.max(el.offsetHeight - VH, 1), pinned: true };
     }
   });
 }
@@ -383,6 +383,11 @@ const prog = pin => pin ? clamp((scrollY - pin.top) / pin.range) : 0;
 const boms = $$('[data-bom]'), frays = $$('[data-fray]');
 const opNote = $('#opNote'), opCloser = $('#opCloser');
 function op(p) {
+  /* the board starts building while the section is still arriving —
+     progress leads the pin by just over half a viewport (desktop only;
+     mobile's entry mapping already does this) */
+  const pin = pins.op;
+  if (pin && pin.pinned) p = clamp((scrollY - (pin.top - VH * 0.55)) / (pin.range + VH * 0.55));
   boms.forEach((el, i) => {
     const t = smooth(p, 0.04 + i * 0.028, 0.13 + i * 0.028);
     el.style.opacity = t;
