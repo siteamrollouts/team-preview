@@ -867,3 +867,19 @@ p em{font-size:1.2em}
   .wcard:hover .wcard__media{grid-template-rows:1fr}
   .wcard:hover .wcard__media img{transform:none}
 }
+
+/* 02 · night — the studio, behind the site's standard black scrim.
+   fades to plain black as the section hands over to Meet Team (js). */
+.night__bg{position:absolute;inset:0;z-index:0;pointer-events:none}
+.night__bg img{width:100%;height:100%;object-fit:cover}
+.night__bg::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.7)}
+.stage--night .night__clock,.stage--night .night__lines{z-index:1}
+
+/* 08 — one CTA for the whole section, centered under the headline */
+.who__ctaw{text-align:center;margin-top:2.4rem}
+.who__cta{margin-top:0;font-size:.7rem;text-transform:uppercase}
+.wlink__arr{display:inline-block;transition:transform .3s var(--ease)}
+.wlink:hover .wlink__arr{transform:translateX(.5em)}
+
+/* 09 — the mark above the closing ask */
+.access__logo{height:32px;width:auto;margin:0 auto 2rem}

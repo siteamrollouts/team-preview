@@ -399,11 +399,11 @@ function op(p) {
     el.style.transform = `scale(${0.9 + t * 0.1}) rotate(${(1 - t) * -1.5 - 1.5}deg)`;
   });
   opNote.style.opacity = smooth(p, 0.52, 0.6);
-  opCloser.style.opacity = smooth(p, 0.86, 0.94);
+  if (opCloser) opCloser.style.opacity = smooth(p, 0.86, 0.94);
 }
 
 /* ── 02 · 02:43am ── */
-const nights = $$('[data-night]'), nightClock = $('#nightClock');
+const nights = $$('[data-night]'), nightClock = $('#nightClock'), nightBg = $('#nightBg');
 
 /* the clock is an alarm clock — seven-segment LED digits built in SVG */
 const Clock = (() => {
@@ -463,6 +463,9 @@ function night(p) {
   });
   const mins = 41 + Math.floor(smooth(p, 0.1, 0.75) * 2);
   Clock.set(`02${mins}`);
+  /* the studio holds behind every line, then dissolves to plain black
+     just as the section hands over to Meet Team */
+  if (nightBg) nightBg.style.opacity = 1 - smooth(p, 0.86, 1);
 }
 
 /* ── 03 · meet team ── */
@@ -578,7 +581,9 @@ const Lattice = (() => {
         r.style.opacity = (smooth(p, 0.14 + i * 0.04, 0.26 + i * 0.04) *
           (0.55 + 0.25 * Math.sin(t * 0.7 + ph))).toFixed(2);
       });
-      const flow = smooth(p, 0.4, 0.5) * (1 - smooth(p, 0.94, 1));
+      /* once flowing, the packets never park — they keep riding the spokes
+         as the section scrolls away (isNear keeps this scrub live past the pin) */
+      const flow = smooth(p, 0.4, 0.5);
       pax.forEach(({ c, a, Rr, dir, sp, ph }) => {
         if (flow <= 0.01) { c.style.opacity = 0; return; }
         let tt = (t * sp + ph) % 1;
