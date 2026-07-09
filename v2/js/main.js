@@ -418,6 +418,7 @@ const Whisper = {
 /* ═══ scene handles ═══ */
 const heroCenter = $('.hero__center');
 const trows = $$('[data-trow]'), truth = $('[data-truth]'), track = $('.track');
+const memoryLn = $('[data-memory]');
 const GROUPS = ['master', 'artwork', 'budget', 'plan', 'convo'];
 const giCount = {};
 const tiles = $$('[data-tile]').map(el => {
@@ -441,6 +442,7 @@ const packets = NODE_XY.map(() => {
    on the far ring, out of focus. */
 const ghostG = $('#oghosts');
 const ghosts = [];
+const gpax = [];   // grey packets riding the phantom spokes
 if (ghostG) {
   const NODE_ANG = NODE_XY.map(([x, y]) => Math.atan2(y - 320, x - 320));
   const GN = 26;
@@ -460,6 +462,12 @@ if (ghostG) {
     const L = p.getTotalLength();
     p.style.strokeDasharray = L; p.style.strokeDashoffset = L; p.style.opacity = 0;
     ghosts.push({ p, L, base: 0.3 + ((i * 0.618 + 0.21) % 1) * 0.7, sp: 0.5 + (i % 5) * 0.17, ph: i * 1.31 });
+    /* a grey packet per phantom spoke — it dims with the line's radial
+       fade on the way out and re-emerges as it returns to the core */
+    const gc = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    gc.setAttribute('r', '2.5'); gc.style.fill = '#8f8b82'; gc.style.opacity = 0;
+    packetsG.append(gc);
+    gpax.push({ c: gc, a, r, sp: 0.13 + (i % 5) * 0.032, ph: (i * 0.417 + 0.09) % 1 });
   }
   /* faded, unlabelled connection points — solid ink fill so the ring
      lines never read through them; only the outline is ghosted.
@@ -527,7 +535,14 @@ function scatter(p) {
     el.style.opacity = f;
     el.style.transform = `translate(${jx}px,${drift + jy + (1 - f) * 22}px) scale(${0.96 + f * 0.04})`;
   });
-  const tr = windowFade(p, 0.8, 1.0, 0.28);   // holds to the pin boundary — no dead scroll after it
+  /* the "one person remembers everything" beat lands first, then the truth
+     line takes the stage and holds to the pin boundary */
+  if (memoryLn) {
+    const mem = windowFade(p, 0.7, 0.87, 0.22);
+    memoryLn.style.opacity = mem;
+    memoryLn.style.transform = `scale(${0.985 + mem * 0.015})`;
+  }
+  const tr = windowFade(p, 0.87, 1.0, 0.28);   // holds to the pin boundary — no dead scroll after it
   truth.style.opacity = tr;
   truth.style.transform = `scale(${0.985 + tr * 0.015})`;
 }
@@ -602,6 +617,17 @@ function connect(p) {
     c2.setAttribute('cx', lerp(320, NODE_XY[i][0], t));
     c2.setAttribute('cy', lerp(320, NODE_XY[i][1], t));
     c2.style.opacity = alive * 0.9;
+  });
+  gpax.forEach(g => {
+    if (alive <= 0) { g.c.style.opacity = 0; return; }
+    let t = (T * g.sp + g.ph) % 1;
+    t = t < 0.5 ? t * 2 : 2 - t * 2;               // out along the spoke, then home
+    const d = t * g.r;
+    g.c.setAttribute('cx', (320 + Math.cos(g.a) * d).toFixed(1));
+    g.c.setAttribute('cy', (320 + Math.sin(g.a) * d).toFixed(1));
+    /* mirror the #ofade gradient (α .4 → .22 @165 → 0 @300), normalized */
+    const fade = d < 165 ? 1 - (d / 165) * 0.45 : Math.max(0.55 * (1 - (d - 165) / 135), 0);
+    g.c.style.opacity = (alive * 0.75 * fade).toFixed(2);
   });
 }
 
