@@ -1,0 +1,88 @@
+/* ═══════════════════════════════════════════════════════════════
+   ALT HERO — notifications hero, lifted from the live site
+   (teamrollouts.com /components/notifications-hero.css) and
+   re-skinned for v3: ink/bone palette, Inter Light + Nyght italic,
+   v3 buttons. Temporary — sits below the brain hero for comparison.
+   ═══════════════════════════════════════════════════════════════ */
+
+.nh-hero{
+  position:relative;
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 50% 38%,#191713 0%,var(--ink) 68%);
+  overflow:hidden;
+}
+/* hero as a layer inside the orbit stage — fades in place while the chips fall through it */
+.nh-hero--layer{position:absolute;inset:0;min-height:0;z-index:1;will-change:opacity,transform}
+.lorbit__halo,.lorbit__path,.lorbit__center,.lorbit__chips{z-index:2}
+.nh-hero__grain{
+  position:absolute;inset:0;opacity:.035;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:200px 200px;
+}
+.nh-hero__orb{position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(120px);opacity:.1;pointer-events:none}
+.nh-hero__orb--orange{background:var(--signal);top:-200px;left:-100px}
+.nh-hero__orb--lime{background:var(--lime);bottom:-220px;right:-120px;opacity:.06}
+
+/* notification cards */
+.nh-notif-layer{position:absolute;inset:0;pointer-events:none;z-index:2}
+.nh-hero-notif-overlay{position:absolute;inset:0;background:rgba(13,12,11,0);z-index:3;pointer-events:none}
+@media(max-width:991px){.nh-hero-notif-overlay{background:rgba(13,12,11,.25)}}
+@media(max-width:768px){.nh-hero-notif-overlay{background:rgba(13,12,11,.45)}}
+@media(max-width:480px){.nh-hero-notif-overlay{background:rgba(13,12,11,.55)}}
+
+.nh-notif{
+  position:absolute;display:flex;gap:10px;align-items:flex-start;
+  background:rgba(255,255,255,.95);border-radius:14px;padding:12px 16px;
+  max-width:320px;min-width:240px;
+  box-shadow:0 8px 32px rgba(0,0,0,.25),0 2px 8px rgba(0,0,0,.12);
+  pointer-events:none;will-change:transform,opacity;opacity:0;
+  transition:opacity .5s cubic-bezier(.16,1,.3,1);
+}
+.nh-notif.nh-notif-in{opacity:var(--nh-notif-opacity,.95)}
+.nh-notif[data-layer="near"]{--nh-notif-opacity:.95}
+.nh-notif[data-layer="mid"]{--nh-notif-opacity:.7}
+.nh-notif[data-layer="far"]{--nh-notif-opacity:.35}
+
+.nh-notif__icon{width:34px;height:34px;min-width:34px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.nh-notif__icon svg{width:18px;height:18px}
+.nh-notif__body{flex:1;min-width:0}
+.nh-notif__row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.nh-notif__title{font-size:13px;font-weight:600;color:#1d1d1f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nh-notif__time{font-size:11px;color:#86868b;white-space:nowrap;flex-shrink:0}
+.nh-notif__msg{font-size:12px;color:#6e6e73;margin-top:2px;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* centre content — v3 typography */
+.nh-hero__content{position:relative;z-index:10;text-align:center;max-width:52rem;padding:0 24px}
+.nh-hero__content .hero__ask{margin-bottom:1.3rem}
+.nh-hero__content .hero__title{white-space:normal}
+@media(min-width:820px){.nh-hero__content .hero__title{white-space:nowrap}}
+
+@media (prefers-reduced-motion:reduce){.nh-notif{transition:none}}
+
+/* ═══════════════════════════════════════════════════════════════
+   LOGO ORBIT — the hero's tools fall into a ring around Team
+   and circle it as you scroll. Chips injected by js/orbit-logos.js.
+   ═══════════════════════════════════════════════════════════════ */
+.lorbit{position:relative;height:300vh;background:var(--ink)}
+.lorbit__stage{position:sticky;top:0;height:100vh;overflow:clip;display:grid;place-items:center}
+.lorbit__halo{position:absolute;width:min(72vw,720px);aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle,rgba(217,250,135,.055),transparent 62%);filter:blur(28px);pointer-events:none}
+.lorbit__path{position:absolute;border-radius:50%;border:1px solid rgba(239,235,227,.08);opacity:0;pointer-events:none}
+.lorbit__center{position:absolute;width:106px;height:106px;border-radius:50%;opacity:0;
+  background:#141210;border:1px solid rgba(239,235,227,.14);display:grid;place-items:center;
+  box-shadow:0 24px 70px rgba(0,0,0,.55),0 0 80px rgba(217,250,135,.07);will-change:transform,opacity}
+.lorbit__center img{width:44px;height:44px;object-fit:contain}
+.lorbit__chips{position:absolute;left:50%;top:50%;width:0;height:0}
+.lorbit__chip{position:absolute;left:0;top:0;width:56px;height:56px;margin:-28px 0 0 -28px;
+  border-radius:50%;opacity:0;box-shadow:0 12px 34px rgba(0,0,0,.45);will-change:transform,opacity}
+.lorbit__chip .chipfade{width:100%;height:100%;border-radius:50%;display:grid;place-items:center;
+  transition:opacity .32s ease,transform .32s ease}
+.lorbit__chip svg{width:25px;height:25px}
+@media(max-width:760px){
+  .lorbit{height:240vh}
+  .lorbit__center{width:84px;height:84px}
+  .lorbit__center img{width:35px;height:35px}
+  .lorbit__chip{width:46px;height:46px;margin:-23px 0 0 -23px}
+  .lorbit__chip svg{width:20px;height:20px}
+}
