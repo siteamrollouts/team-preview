@@ -71,12 +71,10 @@ const io = new IntersectionObserver(es => es.forEach(e => {
 }), { threshold: 0.18 });
 $$('[data-reveal]').forEach(el => io.observe(el));
 
-/* ── ledger type-on ── */
+/* ── ledger: scroll-scrubbed both ways (see ledgerScrub in the frame loop).
+   reduced-motion renders it complete via CSS. ── */
 const ledger = $('[data-ledger]');
-if (ledger) new IntersectionObserver((es, o) => es.forEach(e => {
-  if (!e.isIntersecting) return; o.disconnect();
-  $$('[data-line]', ledger).forEach((r, i) => setTimeout(() => r.classList.add('in'), 350 + i * 420));
-}), { threshold: 0.35 }).observe(ledger);
+const ledgerLines = ledger ? $$('[data-line]', ledger) : [];
 
 /* ── credo strikes ── */
 const strikes = $$('[data-strike]');
@@ -102,7 +100,9 @@ const ACTS = [
   ['act-hero',   '00', 'Intro'],
   ['act-scatter','01', 'The problem'],
   ['act-turn',   '02', 'Meet Team'],
+  ['devband',    '02', 'The product'],
   ['act-connect','03', 'How it works'],
+  ['act-chat',   '03', 'The difference'],
   ['act-reason', '04', 'The whole picture'],
   ['act-act',    '05', 'Team at work'],
   ['act-catch',  '06', 'While you slept'],
@@ -126,7 +126,18 @@ function narrate(y, vh) {
   }
 }
 
+/* — the difference: shared copy for both motion paths — */
+const CHAT_Q = "Where's the final master?";
+const CHAT_BOT = "I don't have access to your files, but here are some best practices for organizing masters: use clear naming conventions, keep a single source of truth, and archive old versions…";
+
 if (reduced) {
+  // chat panes render complete — no typing
+  const bq = $('#botQ'), tq = $('#teamQ'), ba = $('#botA'), ta = $('#teamA');
+  if (bq) {
+    bq.textContent = CHAT_Q; tq.textContent = CHAT_Q; ba.textContent = CHAT_BOT;
+    ta.classList.add('on');
+    $$('[data-stratum]').forEach(el => el.classList.add('lit'));
+  }
   const mA = () => { ACTS.forEach(a => a.top = a.el.offsetTop); docH = document.body.scrollHeight; };
   mA(); addEventListener('resize', mA);
   addEventListener('scroll', () => narrate(scrollY, innerHeight), { passive: true });
@@ -389,6 +400,49 @@ const packets = NODE_XY.map(() => {
   const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
   c.setAttribute('r', '3.5'); c.style.opacity = 0; packetsG.append(c); return c;
 });
+/* phantom spokes — connections beyond the six we name; they reach out from
+   the core and fade before they resolve. plus a few unlabelled node outlines
+   on the far ring, out of focus. */
+const ghostG = $('#oghosts');
+const ghosts = [];
+if (ghostG) {
+  const NODE_ANG = NODE_XY.map(([x, y]) => Math.atan2(y - 320, x - 320));
+  const GN = 26;
+  for (let i = 0; i < GN; i++) {
+    let a = (i / GN) * Math.PI * 2 + 0.19 + (i % 3) * 0.07;
+    for (const na of NODE_ANG) {
+      const d = Math.atan2(Math.sin(a - na), Math.cos(a - na));
+      if (Math.abs(d) < 0.13) a += 0.17;
+    }
+    const r = [205, 248, 285, 302, 226, 264, 292, 238][i % 8] + (i % 5) * 5;
+    const x = 320 + Math.cos(a) * r, y = 320 + Math.sin(a) * r;
+    const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    p.setAttribute('d', `M320 320 L${x.toFixed(1)} ${y.toFixed(1)}`);
+    p.setAttribute('stroke', 'url(#ofade)');
+    p.setAttribute('stroke-width', (0.7 + (i % 4) * 0.22).toFixed(2));
+    ghostG.append(p);
+    const L = p.getTotalLength();
+    p.style.strokeDasharray = L; p.style.strokeDashoffset = L; p.style.opacity = 0;
+    ghosts.push({ p, L, base: 0.3 + ((i * 0.618 + 0.21) % 1) * 0.7, sp: 0.5 + (i % 5) * 0.17, ph: i * 1.31 });
+  }
+  /* faded, unlabelled connection points — solid ink fill so the ring
+     lines never read through them; only the outline is ghosted.
+     One in each angular gap between the labelled nodes (22.5° offsets),
+     plus two inner-ring strays. */
+  [[-1.9635, 295], [-1.1781, 150], [-0.3927, 295], [0.3927, 225], [1.1781, 295],
+   [1.9635, 225], [2.7489, 295], [-2.7489, 225], [1.1781, 150], [-0.3927, 150]].forEach(([a, rr], k) => {
+    const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    c.setAttribute('cx', (320 + Math.cos(a) * rr).toFixed(1));
+    c.setAttribute('cy', (320 + Math.sin(a) * rr).toFixed(1));
+    c.setAttribute('r', 34);
+    c.setAttribute('fill', '#0d0c0b');
+    c.setAttribute('stroke', '#efebe3');
+    c.setAttribute('stroke-opacity', '0.1');
+    c.style.opacity = 0;
+    ghostG.append(c);
+    ghosts.push({ ring: c, ph: k * 1.7, w: k });
+  });
+}
 const connectCopy = $('#act-connect .split__copy');
 const reasonStage = $('#act-reason .stage--split'), reasonCopy = $('#act-reason .split__copy');
 const insights = $$('[data-insight]');
@@ -463,11 +517,14 @@ function turn(p) {
   return smooth(p, 0.1, 0.62);
 }
 
-/* — traveler: the core morphs from the brain into the orbit — */
+/* — traveler: the core morphs from the brain into the orbit. With the
+     product band between the turn and the orbit, it rides BENEATH the
+     page (z-index under main) — ducking under the device on its way — */
+const hasDev = !!$('#devband');
 function travel(pT, pC) {
+  orbitCore.style.opacity = smooth(pC, 0.2, 0.28);
   const born = smooth(pT, 0.93, 1);
   const hand = smooth(pC, 0.02, 0.24);
-  orbitCore.style.opacity = smooth(pC, 0.2, 0.28);
   if (born <= 0 || hand >= 1) { traveler.style.opacity = 0; return; }
   const or = orbit.getBoundingClientRect();
   const unit = or.width / 640;
@@ -484,11 +541,22 @@ function connect(p) {
   connectCopy.style.opacity = c;
   connectCopy.style.transform = `translateY(${(1 - c) * 30}px)`;
   olines.forEach(({ p: path, L }, i) => {
-    const t = smooth(p, 0.12 + i * 0.075, 0.34 + i * 0.075);
+    const t = smooth(p, 0.1 + i * 0.045, 0.28 + i * 0.045);
     path.style.strokeDashoffset = L * (1 - t);
-    const n = onodes[i], nt = smooth(p, 0.26 + i * 0.075, 0.4 + i * 0.075);
+    const n = onodes[i], nt = smooth(p, 0.2 + i * 0.045, 0.32 + i * 0.045);
     n.style.opacity = nt;
     n.setAttribute('transform', `translate(${n.dataset.x} ${n.dataset.y}) scale(${0.6 + nt * 0.4})`);
+  });
+  ghosts.forEach((g, i) => {
+    if (g.ring) {
+      /* the disc fades in once (ink fill occludes the rings), then only
+         its outline shimmers */
+      g.ring.style.opacity = smooth(p, 0.3 + g.w * 0.035, 0.42 + g.w * 0.035);
+      g.ring.setAttribute('stroke-opacity', (0.09 + 0.05 * Math.sin(T * 0.7 + g.ph)).toFixed(3));
+      return;
+    }
+    g.p.style.strokeDashoffset = g.L * (1 - smooth(p, 0.26 + i * 0.008, 0.44 + i * 0.008));
+    g.p.style.opacity = (g.base * (0.6 + 0.4 * Math.sin(T * g.sp + g.ph))).toFixed(2);
   });
   const alive = smooth(p, 0.55, 0.65);
   packets.forEach((c2, i) => {
@@ -499,6 +567,21 @@ function connect(p) {
     c2.setAttribute('cy', lerp(320, NODE_XY[i][1], t));
     c2.style.opacity = alive * 0.9;
   });
+}
+
+/* — the difference: both panes get the same question; one types a caveat,
+     the other lights up its context and answers with receipts — */
+const botQ = $('#botQ'), teamQ = $('#teamQ'), botA = $('#botA');
+const strataEls = $$('[data-stratum]'), teamAns = $('#teamA');
+function chatScene(p) {
+  const qt = smooth(p, 0.06, 0.22);
+  const qn = Math.round(qt * CHAT_Q.length);
+  botQ.textContent = CHAT_Q.slice(0, qn);
+  teamQ.textContent = CHAT_Q.slice(0, qn);
+  const at = smooth(p, 0.26, 0.52);
+  botA.textContent = CHAT_BOT.slice(0, Math.round(at * CHAT_BOT.length));
+  strataEls.forEach((el, i) => el.classList.toggle('lit', p > 0.28 + i * 0.055));
+  teamAns.classList.toggle('on', p > 0.62);
 }
 
 /* — reason — */
@@ -514,6 +597,17 @@ function reason(p) {
   });
 }
 
+/* — the ledger writes itself in as it arrives, and un-writes on the way
+     back up — same scroll-scrub grammar as everything else — */
+function ledgerScrub() {
+  if (!ledger) return;
+  /* no early-out: a fast flick past the window must still settle the
+     toggles, or lines strand mid-state (one element, rect is cheap) */
+  const r = ledger.getBoundingClientRect();
+  const p = clamp((VH - r.top) / (VH * 0.9));
+  ledgerLines.forEach((el, i) => el.classList.toggle('in', p > 0.22 + i * 0.115));
+}
+
 /* — the catch — */
 function catchScene(p) {
   klines.forEach((el, i) => {
@@ -525,11 +619,75 @@ function catchScene(p) {
   if (catchImg) catchImg.style.transform = `translateY(${(p - 0.5) * -7}%) scale(1.08)`;
 }
 
+/* ═══ the app screen lives — countdown ticks, tasks land, teammate chats ═══ */
+(() => {
+  const band = $('#devband'); if (!band) return;
+  let live = false;
+  new IntersectionObserver(e => { live = e[0].isIntersecting; }, { threshold: 0.12 }).observe(band);
+
+  /* countdown counts for real */
+  const secsEl = $('#appSecs'), minsEl = $('#appMins');
+  let m = 6, s = 27;
+  setInterval(() => {
+    if (!live || document.hidden) return;
+    s--; if (s < 0) { s = 59; m = m > 0 ? m - 1 : 59; }
+    secsEl.textContent = String(s).padStart(2, '0');
+    minsEl.textContent = String(m).padStart(2, '0');
+  }, 1000);
+
+  /* tasks keep landing on the timeline */
+  const days = $$('.app__day');
+  const POOL = [
+    ['tcard--blue',  'Master v10 QC Check', 'AUDIO'],
+    ['tcard--teal',  'Pre-Save Link Goes Live', 'DSP_ACTIVATION'],
+    ['tcard--amber', 'Vinyl PO Sign-off', 'OPS'],
+    ['tcard--dark',  'EPK Refresh + Press Shots', 'PRESS'],
+    ['tcard--purple','Lyric Video Teaser Cut', 'CONTENT'],
+    ['tcard--blue',  'Radio One-Sheet Draft', 'RADIO'],
+  ];
+  let ti = 0;
+  setInterval(() => {
+    if (!live || document.hidden) return;
+    const [cls, title, tag] = POOL[ti % POOL.length];
+    const day = days[1 + (ti % 3)];              // columns 2–4; col 1 keeps its anchors
+    ti++;
+    if (!day) return;
+    const el = document.createElement('div');
+    el.className = `tcard ${cls} tcard--pop`;
+    el.innerHTML = `<p class="mono tcard__meta">ACTIVE · NEW</p><b>${title}</b><span class="mono">${tag}</span>`;
+    day.append(el);
+    const mine = day.querySelectorAll('.tcard--pop');
+    if (mine.length > 2) { const o = mine[0]; o.classList.add('tcard--out'); setTimeout(() => o.remove(), 550); }
+  }, 3800);
+
+  /* the conversation carries on */
+  const scroll = $('.app__scroll');
+  const CHAT = [
+    [0, 'TEAMMATE · 12:53', "Pulled 3 past releases. Ava's pre-save pushes in week 2 outperformed week 4 by 31%."],
+    [1, '12:54 · YOU', 'Move the pre-save blast earlier then.'],
+    [0, 'TEAMMATE · 12:54', 'Done. Moved to Thu 25 and assigned to Maya. Budget untouched.'],
+    [1, '12:56 · YOU', "What's still unassigned this week?"],
+    [0, 'TEAMMATE · 12:56', 'Two tasks: the country playlist pitch and the venue shortlist. Want owners on both?'],
+    [1, '12:57 · YOU', 'Yes, assign them.'],
+    [0, 'TEAMMATE · 12:57', 'Assigned. Playlist pitch to Sam, venues to Maya. Timeline updated.'],
+  ];
+  let ci = 0;
+  setInterval(() => {
+    if (!live || document.hidden) return;
+    const [you, meta, text] = CHAT[ci % CHAT.length]; ci++;
+    const d = document.createElement('div');
+    d.className = 'app__msg' + (you ? ' app__msg--you' : '') + ' app__msg--in';
+    d.innerHTML = `<u class="mono">${meta}</u><p>${text}</p>`;
+    scroll.append(d);
+    while (scroll.children.length > 4) scroll.firstChild.remove();
+  }, 4200);
+})();
+
 /* ── cursor: native by default; the logomark equalizer plays over anything interactive ── */
 if (!touch) {
   document.documentElement.classList.add('eqcur');
   const cur = $('.cursor');
-  let tx = -100, ty = -100, cx = -100, cy = -100, hinted = false;
+  let tx = -100, ty = -100, cx = -100, cy = -100;
   addEventListener('pointermove', e => { tx = e.clientX; ty = e.clientY; }, { passive: true });
   document.addEventListener('mouseover', e => {
     const t = e.target.closest('a,button,[data-hover]');
@@ -542,11 +700,6 @@ if (!touch) {
   (function cloop() {
     cx = lerp(cx, tx, 0.55); cy = lerp(cy, ty, 0.55);
     cur.style.transform = `translate(${cx}px,${cy}px)`;
-    if (!hinted && scrollY > VH * 0.9 && tx > 0) {   // one-time nudge as the story pins
-      hinted = true;
-      cur.classList.add('is-hint');
-      setTimeout(() => cur.classList.remove('is-hint'), 2600);
-    }
     requestAnimationFrame(cloop);
   })();
   $$('[data-magnet]').forEach(b => {
@@ -576,6 +729,7 @@ function frame(now) {
   const pS = pins.scatter ? clamp((SY - pins.scatter.top) / pins.scatter.range) : 0;
   const pT = pins.turn    ? clamp((SY - pins.turn.top)    / pins.turn.range)    : 0;
   const pC = pins.connect ? clamp((SY - pins.connect.top) / pins.connect.range) : 0;
+  const pQ = pins.chat    ? clamp((SY - pins.chat.top)    / pins.chat.range)    : 0;
   const pR = pins.reason  ? clamp((SY - pins.reason.top)  / pins.reason.range)  : 0;
   const pK = pins.catch   ? clamp((SY - pins.catch.top)   / pins.catch.range)   : 0;
 
@@ -588,7 +742,9 @@ function frame(now) {
   let conv = pins.turn ? smooth(pT, 0.1, 0.62) : 0;
   if (isNear(pins.turn) || isNear(pins.connect)) travel(pT, pC);
   if (isNear(pins.connect)) connect(pC);
+  if (isNear(pins.chat)) chatScene(pQ);
   if (isNear(pins.reason)) reason(pR);
+  ledgerScrub();
   if (isNear(pins.catch)) catchScene(pK);
 
   /* — the brain's whole-page timeline — */

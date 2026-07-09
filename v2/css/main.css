@@ -87,12 +87,11 @@ html.eqcur a,html.eqcur button,html.eqcur [data-hover]{cursor:none}
 .cursor__eq i:nth-child(4){animation-delay:-.7s}
 .cursor__eq i:nth-child(5){animation-delay:-.3s}
 @keyframes eqbar{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}
-.cursor__hint{position:absolute;left:16px;top:0;transform:translateY(-50%);white-space:nowrap;
-  font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--bone-dim);
-  opacity:0;transition:opacity .6s ease}
-.cursor.is-hint .cursor__hint{opacity:1}
 
-.traveler{position:fixed;left:0;top:0;z-index:40;width:108px;height:108px;border-radius:50%;
+/* z-index 1: beneath <main> (z2), so the flying core ducks UNDER the device
+   band on its way from the turn to the orbit; section backgrounds are
+   transparent, so it stays visible everywhere else */
+.traveler{position:fixed;left:0;top:0;z-index:1;width:108px;height:108px;border-radius:50%;
   background:var(--signal);display:grid;place-items:center;pointer-events:none;
   opacity:0;will-change:transform,opacity;color:var(--ink)}
 .traveler svg{width:46px;height:46px}
@@ -712,7 +711,8 @@ body.menu-open .menu__list a{opacity:1;transform:none}
   .track__list{position:relative;height:3.4rem}
   .trow{position:absolute;top:0;left:0;width:100%;border-bottom:0;padding:.4rem 0;opacity:0}
   .trow span{font-size:clamp(2rem,8.4vw,2.6rem)}
-  .tile{left:50%;top:calc(25% + var(--gi) * 15.5%);
+  /* five-tile groups need the tighter rhythm to stay on stage */
+  .tile{left:50%;top:calc(22% + var(--gi) * 14%);
     width:min(320px,86vw);min-width:0;max-width:none;margin-left:max(-160px,-43vw);
     padding:.8rem .95rem;rotate:calc(var(--r) * .4)}
 }
@@ -728,3 +728,218 @@ body.menu-open .menu__list a{opacity:1;transform:none}
   .capsule{gap:.55rem;padding:.4rem .5rem}
   .capsule__orb,.capsule__act{display:none}
 }
+
+/* ═══ ACT 3.5 · the difference — a chat window vs Team (2026-07-09) ═══ */
+.pin--chat{height:340vh}
+.pin--chat .pin__stage{display:grid;align-content:center;justify-items:center;
+  row-gap:clamp(1.6rem,3.4vh,2.8rem);padding:0 var(--pad)}
+.chat__head{text-align:center}
+.chat__head em{color:var(--lime)}
+.chat__panes{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1rem,2.2vw,1.8rem);
+  width:min(1160px,100%)}
+.pane{background:#141210;border:1px solid rgba(239,235,227,.09);border-radius:20px;
+  box-shadow:0 40px 90px rgba(0,0,0,.5);display:flex;flex-direction:column;overflow:clip}
+.pane--bot{background:#121110}
+.pane__bar{display:flex;align-items:center;gap:.55rem;padding:.95rem 1.25rem;
+  border-bottom:1px solid rgba(239,235,227,.08);
+  font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;font-weight:620;color:var(--bone-dim)}
+.pane__bar i{font-style:normal;color:var(--bone-faint)}
+.pane--team .pane__bar{color:var(--lime)}
+.pane__bar .tmate__mark{width:22px;height:22px;border-radius:6px}
+.pane__bar .tmate__mark img{width:11px;height:11px}
+.pane__body{padding:1.15rem 1.25rem;flex:1;display:flex;flex-direction:column;gap:.95rem}
+.pane__q{font-size:.98rem;font-weight:540;min-height:1.5em;color:var(--bone)}
+.pane__q .caret{display:inline-block;width:7px;height:14px;background:var(--bone-dim);
+  margin-left:2px;vertical-align:-2px;animation:blink 1.05s steps(2) infinite}
+.pane__a{font-size:.9rem;line-height:1.6;color:var(--bone-dim);min-height:6em}
+.strata{display:flex;flex-direction:column;gap:.45rem}
+.stratum{display:grid;grid-template-columns:4.6rem 1fr;gap:.9rem;align-items:center;
+  border:1px solid rgba(239,235,227,.07);border-radius:10px;padding:.5rem .8rem;
+  font-size:.76rem;color:var(--bone-faint);opacity:.45;
+  transition:opacity .45s var(--ease),border-color .45s,background .45s,color .45s}
+.stratum b{font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;font-weight:640}
+.stratum.lit{opacity:1;color:var(--bone-dim);border-color:rgba(217,250,135,.35);background:rgba(217,250,135,.05)}
+.stratum.lit b{color:var(--lime)}
+.pane__ans{opacity:0;transform:translateY(10px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.pane__ans.on{opacity:1;transform:none}
+.pane__ans p{font-size:.9rem;line-height:1.6;color:var(--bone-dim)}
+.pane__ans b{color:var(--bone);font-weight:600}
+.pane__rcpts{margin-top:.7rem;display:flex;flex-wrap:wrap;gap:.45em 1.5em;
+  font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;font-weight:620;color:rgba(217,250,135,.75)}
+.pane__rcpts span{white-space:nowrap}
+.pane__tags{padding:.85rem 1.25rem;border-top:1px solid rgba(239,235,227,.08);
+  font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--bone-faint)}
+.pane__tags--team{color:rgba(217,250,135,.7)}
+.pane__brands{display:flex;align-items:center;justify-content:center;gap:1.7rem;padding:.85rem 1.25rem 1rem}
+.pane__brands img{height:16px;width:auto;filter:brightness(0) invert(1);opacity:.4;transition:opacity .3s}
+.pane:hover .pane__brands img{opacity:.6}
+@media(max-width:900px){
+  .pin--chat{height:auto}
+  .pin--chat .pin__stage{position:relative;height:auto;min-height:0;padding:10vh var(--pad) 8vh;align-content:start}
+  .chat__panes{grid-template-columns:1fr}
+  .pane__a{min-height:0}
+  .chat__head{font-size:clamp(1.9rem,7.2vw,2.6rem)}
+}
+@media (prefers-reduced-motion:reduce){
+  .pin--chat{height:auto}
+  .pane__ans{opacity:1 !important;transform:none !important}
+  .stratum{opacity:1 !important}
+  .pane__q .caret{animation:none !important}
+}
+
+/* the difference: compact on short viewports so head + panes always fit the pin */
+@media(min-width:901px) and (max-height:840px){
+  .chat__head{font-size:clamp(1.9rem,3.6vw,3rem)}
+  .pin--chat .pin__stage{row-gap:1.2rem}
+  .pane__a{min-height:4em}
+  .pane__body{padding:.9rem 1.1rem;gap:.7rem}
+  .stratum{padding:.4rem .75rem}
+}
+
+/* orbit: wordmark logos that ship dark render white on the node disc */
+.onode image.oinv{filter:brightness(0) invert(1);opacity:.92}
+
+/* ═══ the product — the Team app recreated, after the turn (2026-07-09).
+   Ported from the Mission Narrative build, re-grounded for Behind the Glass:
+   dark band (the brain field stays behind), glass device frame. ═══ */
+#devband{position:relative;z-index:2;padding:6vh var(--pad) 16vh;display:grid;place-items:center}
+#devband .mono{font-family:ui-monospace,'SF Mono',Menlo,monospace;font-weight:500;letter-spacing:.1em}
+.device{width:min(1280px,94vw);border:1px solid rgba(154,150,140,.45);border-radius:24px;
+  padding:10px;background:rgba(22,20,18,.4);
+  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+.device__screen{display:flex;flex-direction:column;aspect-ratio:1440/900;
+  background:#100f0e;border:1px solid rgba(239,235,227,.1);border-radius:16px;
+  overflow:hidden;box-shadow:0 44px 130px rgba(0,0,0,.45)}
+@media(max-width:900px){.device__screen{aspect-ratio:auto}}
+/* ═══ device screen: the Team app, recreated ═══ */
+.dvc--app{background:#f2eee6;color:var(--ink);display:flex;flex-direction:column;
+  aspect-ratio:1440/900;font-size:12px}
+.dvc--app .mono{letter-spacing:.1em}
+/* top bar */
+.app__top{display:flex;align-items:center;gap:1rem;padding:.65rem 1rem;flex:none;
+  background:#faf7f1;border-bottom:1px solid rgba(13,12,11,.08)}
+.app__mark{height:16px;width:auto}
+.app__crumb{font-size:.52rem;color:rgba(13,12,11,.55)}
+.app__pill{font-size:.5rem;padding:.45em .9em;border:1px solid rgba(13,12,11,.16);border-radius:5px;color:rgba(13,12,11,.7)}
+.app__on{margin-left:auto;display:flex;align-items:center;gap:.5em;font-size:.5rem;color:rgba(13,12,11,.5)}
+.app__on i{width:6px;height:6px;border-radius:50%;background:var(--lime);border:1px solid rgba(13,12,11,.2)}
+.app__share{font-size:.5rem;padding:.45em 1em;background:var(--ink);color:var(--bone);border-radius:99px}
+/* columns */
+.app__cols{flex:1;min-height:0;display:grid;grid-template-columns:172px 1fr 262px}
+/* left nav */
+.app__nav{background:#faf7f1;border-right:1px solid rgba(13,12,11,.08);padding:.9rem .95rem;overflow:hidden}
+.app__navlab{font-size:.44rem;letter-spacing:.24em;color:rgba(13,12,11,.4);margin:.9rem 0 .5rem}
+.app__navlab:first-child{margin-top:0}
+.app__rel{font-weight:560;font-size:.78rem}
+.app__newrel{margin-top:.45rem;font-size:.46rem;padding:.5em .8em;border:1px solid rgba(13,12,11,.14);border-radius:6px;color:rgba(13,12,11,.6);display:inline-block}
+.app__nav ul{list-style:none}
+.app__nav li{font-size:.68rem;font-weight:440;color:rgba(13,12,11,.66);padding:.32rem .5rem;border-radius:5px}
+.app__nav li.on{background:rgba(13,12,11,.08);color:var(--ink);font-weight:560}
+/* main */
+.app__main{padding:1rem 1.25rem;overflow:hidden;min-width:0}
+.app__chip{display:inline-flex;align-items:center;gap:.6em;font-size:.48rem;letter-spacing:.2em;
+  background:var(--lime);color:var(--ink);padding:.5em 1em;border-radius:99px}
+.app__chip i{width:5px;height:5px;border-radius:50%;background:var(--ink)}
+.app__h{margin-top:.55rem;font-family:var(--font-serif);font-weight:300;letter-spacing:-.01em;
+  font-size:clamp(1.2rem,2.2vw,2rem);line-height:1.05}
+.app__h em{font-style:italic}
+.app__count{margin-top:.3rem;font-family:var(--font-display);font-weight:440;letter-spacing:-.03em;
+  font-size:clamp(1.3rem,2.1vw,1.9rem);display:flex;align-items:baseline;gap:.25em}
+.app__count small{font-size:.45em;color:rgba(13,12,11,.45);font-weight:500}
+.app__count span{color:rgba(13,12,11,.3)}
+.app__count b{font-weight:440;background:var(--lime);border-radius:6px;padding:0 .18em;display:inline-flex;align-items:baseline}
+.app__count b small{color:rgba(13,12,11,.6)}
+.app__filters{display:flex;gap:.4rem;margin-top:.75rem;flex-wrap:wrap}
+.app__filters span{display:inline-flex;align-items:center;gap:.5em;font-size:.46rem;letter-spacing:.14em;
+  padding:.55em 1em;border:1px solid rgba(13,12,11,.13);border-radius:99px;color:rgba(13,12,11,.6);white-space:nowrap}
+.app__filters span i{width:5px;height:5px;border-radius:50%;background:var(--signal)}
+.app__f--dark{background:var(--ink);color:var(--bone) !important;border-color:var(--ink) !important}
+.app__f--search{min-width:7rem}
+.app__stacked{margin-top:.7rem;font-size:.46rem;color:rgba(13,12,11,.45);
+  background:#faf7f1;border:1px solid rgba(13,12,11,.06);border-radius:6px;padding:.55em .9em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.app__stacked b{color:#c2497c;font-weight:600}
+/* day columns */
+.app__days{display:grid;grid-template-columns:repeat(4,1fr);gap:.55rem;margin-top:.7rem;min-height:0}
+.app__day{border-left:1px dashed rgba(13,12,11,.1);padding-left:.55rem;min-width:0}
+.app__day:first-child{border-left:0;padding-left:0}
+.app__day.is-today .app__date{background:#e7effa;border-radius:8px}
+.app__date{display:flex;align-items:baseline;gap:.45em;padding:.45em .6em;font-size:.5rem;color:rgba(13,12,11,.5)}
+.app__date b{font-weight:600;letter-spacing:.14em}
+.app__date{font-size:.46rem}
+.app__date span{letter-spacing:.16em}
+.app__date em{font-style:normal;margin-left:auto;font-size:.9em;letter-spacing:.14em;
+  background:#d5e3f6;padding:.3em .7em;border-radius:99px;color:rgba(13,12,11,.55)}
+.app__date em.is-rel{background:var(--lime);color:var(--ink)}
+.tcard{border-radius:9px;padding:.6rem .65rem;margin-top:.5rem;min-width:0}
+.tcard b{display:block;font-size:.62rem;font-weight:540;line-height:1.35}
+.tcard > span{display:inline-block;margin-top:.45rem;font-size:.4rem;letter-spacing:.16em;
+  padding:.35em .8em;border-radius:99px;background:rgba(13,12,11,.1)}
+.tcard__meta{font-size:.4rem;letter-spacing:.18em;margin-bottom:.35rem;opacity:.75}
+.tcard--purple{background:#a743e6;color:#fff}
+.tcard--purple > span{background:rgba(255,255,255,.2)}
+.tcard--purple i{display:block;margin-top:1.2rem;font-size:.52rem;opacity:.75}
+.tcard--dark{background:#241f1c;color:var(--bone)}
+.tcard--dark > span{background:rgba(239,235,227,.14)}
+.tcard--ref{background:#fdf4f5;border:1px dashed #eeb4c3}
+.tcard__ref{font-size:.38rem;letter-spacing:.12em;color:#c2497c;margin-bottom:.35rem;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tcard--ref > span{background:#f7e2e8;color:#a45}
+.tcard--add{border:1px dashed rgba(13,12,11,.18);color:rgba(13,12,11,.45);
+  text-align:center;padding:.9rem 0;font-size:.46rem;letter-spacing:.18em}
+/* teammate chat */
+.app__chat{background:#161311;color:var(--bone);display:flex;flex-direction:column;
+  border-left:1px solid rgba(13,12,11,.2);padding:.9rem .95rem;min-height:0}
+.app__chathead{display:flex;align-items:center;gap:.55em;font-size:.5rem;letter-spacing:.16em;color:var(--bone-dim);
+  padding-bottom:.7rem;border-bottom:1px solid var(--line);flex:none}
+.app__chathead img{height:11px;width:auto}
+.app__chathead em{font-family:var(--font-serif);font-style:italic;text-transform:none;letter-spacing:0;font-size:1.15em}
+.app__chathead span{margin-left:auto;font-size:.42rem;border:1px solid rgba(217,250,135,.4);color:var(--lime);
+  padding:.3em .8em;border-radius:99px}
+.app__scroll{flex:1;min-height:0;overflow:hidden;padding-top:.8rem}
+.app__msg{margin-bottom:.85rem}
+.app__msg u{display:block;text-decoration:none;font-size:.42rem;letter-spacing:.18em;color:var(--bone-faint);margin-bottom:.4rem}
+.app__msg p{font-size:.66rem;line-height:1.5;background:#e9e5dc;color:#1d1b18;
+  border-radius:10px;padding:.65rem .75rem}
+.app__msg > span{display:inline-block;margin-top:.45rem;font-size:.42rem;letter-spacing:.14em;
+  border:1px solid var(--line);border-radius:99px;padding:.45em .9em;color:var(--bone-dim)}
+.app__msg--you{text-align:right}
+.app__msg--you p{background:#2a2622;color:var(--bone);text-align:left}
+.app__ask{flex:none;display:flex;align-items:center;font-size:.5rem;letter-spacing:.18em;color:var(--bone-faint);
+  border:1px solid var(--line);border-radius:9px;padding:.8em .95em;margin-top:.4rem}
+.app__ask i{margin-left:auto;width:20px;height:20px;border-radius:50%;background:var(--lime);color:var(--ink);
+  display:grid;place-items:center;font-style:normal;font-size:.6rem}
+.app__feed{flex:none;display:flex;align-items:center;gap:.6em;font-size:.44rem;letter-spacing:.16em;
+  color:var(--bone-faint);padding-top:.75rem}
+.app__feed i{width:6px;height:6px;border-radius:50%;background:var(--lime)}
+@media(max-width:1100px){.app__cols{grid-template-columns:1fr 250px}.app__nav{display:none}}
+@media(max-width:760px){
+  .dvc--app{aspect-ratio:auto}
+  .app__cols{grid-template-columns:1fr}
+  .app__chat{border-left:0;border-top:1px solid rgba(13,12,11,.15);max-height:260px}
+  .app__days{grid-template-columns:1fr 1fr}
+  .app__days .app__day:nth-child(n+3){display:none}
+  .app__crumb,.app__on{display:none}
+}
+/* app screen, animated: extra task colours, landings, chat flow */
+.app__count u{text-decoration:none}
+.tcard--blue{background:#4a68d8;color:#fff}
+.tcard--blue > span{background:rgba(255,255,255,.2)}
+.tcard--teal{background:#2f8f80;color:#fff}
+.tcard--teal > span{background:rgba(255,255,255,.2)}
+.tcard--amber{background:#e8b04b;color:var(--ink)}
+.tcard--amber > span{background:rgba(13,12,11,.12)}
+@keyframes tpop{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+.tcard--pop{animation:tpop .55s var(--ease) both}
+.tcard--out{opacity:0;transform:translateY(-8px) scale(.97);transition:opacity .5s,transform .5s}
+@keyframes msgin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.app__msg--in{animation:msgin .5s var(--ease) both}
+.app__scroll{display:flex;flex-direction:column;justify-content:flex-end}
+
+/* reduced motion: the scrubbed ledger renders complete */
+@media (prefers-reduced-motion:reduce){
+  .ledger__pill{opacity:1 !important;transform:none !important}
+}
+
+/* scatter: dark wordmark logos render white on the glass tiles */
+.tile>img.winv{filter:brightness(0) invert(1);opacity:.92}

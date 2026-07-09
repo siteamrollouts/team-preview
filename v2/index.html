@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="robots" content="noindex,nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Team — Operational Intelligence for Music Releases</title>
 <meta name="description" content="Team is the operational intelligence layer for music releases — it connects the tools and people your release already relies on, reasons across all of them, and does the work.">
 <link rel="canonical" href="https://teamrollouts.com/">
+<meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#0d0c0b">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Team">
@@ -24,7 +24,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/NyghtSerif-LightItalic.woff" as="font" type="font/woff" crossorigin>
 <link rel="preload" href="assets/fonts/Inter-Variable.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/main.css?v=20260709f">
 <!-- HIDDEN for now (per Simon, 2026-07-08): styles for the parked lorbit/notifications hero
 <link rel="stylesheet" href="css/nh-hero.css"> -->
 
@@ -43,7 +43,6 @@
 <div class="grain" aria-hidden="true"></div>
 <div class="cursor" aria-hidden="true">
   <div class="cursor__eq"><i></i><i></i><i></i><i></i><i></i></div>
-  <span class="cursor__hint">Scroll</span>
 </div>
 <canvas id="field" class="field" aria-hidden="true"></canvas>
 
@@ -182,10 +181,12 @@
     <div class="tile" data-group="budget"  style="--x:68%; --y:64%; --d:0.7;  --r:5deg;  --b:2px"  data-tile><img src="assets/logos/notion.svg" alt=""><div><b>Notion</b><span>One-sheet still shows $2,500</span><i>Out of date since 14:02</i></div><u>1</u></div>
     <div class="tile" data-group="budget"  style="--x:76%; --y:18%; --d:0.85; --r:3deg;  --b:1px"  data-tile><img src="assets/logos/googledocs.svg" alt=""><div><b>Docs</b><span>Budget notes — video shoot</span><i>Contradicts the sheet by $600</i></div><u>1</u></div>
     <div class="tile" data-group="budget"  style="--x:46%; --y:50%; --d:1.1;  --r:-5deg; --b:0px"  data-tile><img src="assets/logos/dropbox.svg" alt=""><div><b>Dropbox</b><span>vinyl_quote_2024.pdf</span><i>Never added to the sheet</i></div><u>1</u></div>
+    <div class="tile" data-group="budget"  style="--x:84%; --y:42%; --d:0.95; --r:4deg;  --b:1px"  data-tile><img src="assets/logos/bmi.svg" alt=""><div><b>BMI</b><span>Q3 royalty statement posted</span><i>Splits don't match the sheet — 2 writers missing</i></div><u>2</u></div>
     <div class="tile" data-group="plan"    style="--x:54%; --y:18%; --d:0.9;  --r:5deg;  --b:1px"  data-tile><img src="assets/logos/notion.svg" alt=""><div><b>Notion</b><span>Rollout plan / Week 3</span><i>41 blocks · last synced never</i></div><u>7</u></div>
     <div class="tile" data-group="plan"    style="--x:72%; --y:42%; --d:1.1;  --r:-4deg; --b:1px"  data-tile><img src="assets/logos/monday.svg" alt="" class="wide"><div><b>Monday</b><span>Release board — 6 overdue</span><i>3 duplicates of the Notion plan</i></div><u>6</u></div>
     <div class="tile" data-group="plan"    style="--x:50%; --y:66%; --d:0.75; --r:3deg;  --b:2px"  data-tile><img src="assets/logos/asana.svg" alt=""><div><b>Asana</b><span>Pitch playlists — due Fri</span><i>Unassigned</i></div><u>2</u></div>
     <div class="tile" data-group="plan"    style="--x:80%; --y:70%; --d:1.25; --r:-6deg; --b:2px"  data-tile><img src="assets/logos/googlecalendar.svg" alt=""><div><b>Calendar</b><span>Video shoot — Thu 14</span><i>No call sheet attached</i></div><u>1</u></div>
+    <div class="tile" data-group="plan"    style="--x:62%; --y:52%; --d:1.05; --r:3deg;  --b:1px"  data-tile><img src="assets/logos/believe.png" alt="" class="wide winv"><div><b>Believe</b><span>Delivery window closes Friday</span><i>Metadata incomplete · artwork still missing</i></div><u>2</u></div>
     <div class="tile" data-group="convo"   style="--x:52%; --y:20%; --d:0.8;  --r:-5deg; --b:1px"  data-tile><img src="assets/logos/slack.svg" alt=""><div><b>Slack</b><span>“did we approve the vinyl PO?”</span><i>#release-ops · 11:47pm</i></div><u>3</u></div>
     <div class="tile" data-group="convo"   style="--x:74%; --y:36%; --d:1.15; --r:4deg;  --b:0px"  data-tile><img src="assets/logos/microsoftteams.svg" alt=""><div><b>Teams</b><span>Label sync — recording ready</span><i>Nobody has watched it</i></div><u>1</u></div>
     <div class="tile" data-group="convo"   style="--x:60%; --y:64%; --d:1.0;  --r:2deg;  --b:1px"  data-tile><img src="assets/logos/zoom.svg" alt=""><div><b>Zoom</b><span>Distributor call — 45:12</span><i>Actions live in someone's notebook</i></div><u>1</u></div>
@@ -205,6 +206,75 @@
   </div>
 </section>
 
+<!-- ══════════════ ACT 2.5 · THE PRODUCT — the app itself ══════════════ -->
+<section class="devband" id="devband" aria-label="Team interface preview">
+  <div class="device" data-reveal>
+    <div class="device__screen dvc--app">
+      <div class="app__top">
+        <img class="app__mark" src="assets/logo/team-logomark-black.png" alt="">
+        <p class="app__crumb mono">HOME / AVA NORTH / MIDNIGHT STATIC / TIMELINE</p>
+        <span class="app__pill mono">+ RELEASE</span>
+        <span class="app__on mono"><i></i>1 ONLINE &middot; JUST YOU</span>
+        <span class="app__share mono">SHARE</span>
+      </div>
+      <div class="app__cols">
+        <aside class="app__nav">
+          <p class="mono app__navlab">RELEASE</p>
+          <p class="app__rel">Midnight Static</p>
+          <p class="app__newrel mono">+ NEW RELEASE</p>
+          <p class="mono app__navlab">ARTIST</p>
+          <ul><li>Home</li><li>Artist DNA</li><li>Assets</li><li>Intelligence</li><li>Connectors</li><li>Touring</li></ul>
+          <p class="mono app__navlab">RELEASE</p>
+          <ul><li class="on">Timeline</li><li>Strategy</li><li>Research</li><li>Tracks</li><li>Territories</li><li>DSP Priorities</li><li>Budget</li><li>Ready to Roll</li></ul>
+        </aside>
+        <div class="app__main">
+          <p class="app__chip mono"><i></i>TIMELINE &middot; 3 TASKS &middot; RELEASE 18 SEPT</p>
+          <h3 class="app__h">Midnight Static, <em>drops in</em></h3>
+          <p class="app__count">85<small>d</small><span>&middot;</span>11<small>h</small><span>&middot;</span><u id="appMins">06</u><small>m</small><span>&middot;</span><b><u id="appSecs">27</u><small>s</small></b></p>
+          <div class="app__filters mono"><span class="app__f--search">SEARCH TASK</span><span class="app__f--dark">TODAY</span><span><i></i>RELEASE &middot; SEP 18</span><span>STACKS &middot; 1</span><span>ACTUAL</span></div>
+          <p class="app__stacked mono">STACKED WITH: <b>&#9679; JUNO VALE — SLOW MOTION (2026-06-26)</b> &middot; ACTUAL DATES</p>
+          <div class="app__days">
+            <div class="app__day is-today">
+              <p class="app__date mono"><b>WED</b>24<span>JUN</span><em>TODAY</em></p>
+              <div class="tcard tcard--purple"><p class="mono tcard__meta">ACTIVE &middot; SOON</p><b>Pitch to Country Editorial Playlists</b><span class="mono">MARKETING</span><i>Unassigned</i></div>
+              <div class="tcard tcard--dark"><p class="mono tcard__meta">ACTIVE &middot; SOON</p><b>Pitch to Faith Editorial Playlists</b><span class="mono">MARKETING</span></div>
+            </div>
+            <div class="app__day">
+              <p class="app__date mono"><b>THU</b>25<span>JUN</span></p>
+              <div class="tcard tcard--ref"><p class="mono tcard__ref">&#9679; JUNO VALE — SLOW MOTION &nbsp;REF</p><b>Final Pre-Save Push: Email + Social Blast (48 Hours&hellip;)</b><span class="mono">MARKETING</span></div>
+              <div class="tcard tcard--add mono">+ ADD TASK</div>
+            </div>
+            <div class="app__day">
+              <p class="app__date mono"><b>FRI</b>26<span>JUN</span><em class="is-rel">&#9679; RELEASE</em></p>
+              <div class="tcard tcard--ref"><p class="mono tcard__ref">&#9679; JUNO VALE — SLOW MOTION &nbsp;REF</p><b>RELEASE DAY: Convert Pre-Save Link to Streaming&hellip;</b><span class="mono">DSP_ACTIVATION</span></div>
+              <div class="tcard tcard--ref"><p class="mono tcard__ref">&#9679; JUNO VALE — SLOW MOTION &nbsp;REF</p><b>RELEASE DAY: Post Announcement Content&hellip;</b><span class="mono">SOCIAL</span></div>
+            </div>
+            <div class="app__day">
+              <p class="app__date mono"><b>SAT</b>27<span>JUN</span></p>
+              <div class="tcard tcard--ref"><p class="mono tcard__ref">&#9679; JUNO VALE — SLOW MOTION &nbsp;REF</p><b>Research &amp; Shortlist Intimate Venues (50&ndash;150&hellip;)</b><span class="mono">OTHER</span></div>
+              <div class="tcard tcard--add mono">+ ADD TASK</div>
+            </div>
+          </div>
+        </div>
+        <aside class="app__chat">
+          <p class="app__chathead mono"><img src="assets/logo/team-logomark-white-trim.png" alt=""> TEAMMATE <em>on Timeline</em><span>NEW</span></p>
+          <div class="app__scroll">
+            <div class="app__msg"><u class="mono">TEAMMATE &middot; 12:44</u>
+              <p>Want me to build out a full task plan that assigns this $17,500 across the remaining categories with dates and owners?</p>
+              <span class="mono">&#9638; SHOW ME ON THE BOARD</span></div>
+            <div class="app__msg app__msg--you"><u class="mono">12:50 &middot; YOU</u>
+              <p>What's worked for Ava on previous releases?</p></div>
+            <div class="app__msg"><u class="mono">TEAMMATE &middot; 12:52</u>
+              <p>Let me pull the remaining documents on Ava's history.</p></div>
+          </div>
+          <div class="app__ask mono">ASK ABOUT TIMELINE&hellip;<i>&#8599;</i></div>
+          <p class="app__feed mono"><i></i>FEED THE BRAIN &middot; 7 DOCS &middot; 18 DONE TODAY</p>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ══════════════ ACT 3 · CONNECT ══════════════ -->
 <section class="pin pin--connect" id="act-connect" data-scrub="connect">
   <div class="pin__stage stage--split">
@@ -219,33 +289,91 @@
     </div>
     <div class="split__viz">
       <svg class="orbit" viewBox="0 0 640 640" role="img" aria-label="Your tools connected to one core">
+        <defs>
+          <radialGradient id="ofade" gradientUnits="userSpaceOnUse" cx="320" cy="320" r="300">
+            <stop offset="0" stop-color="#efebe3" stop-opacity=".4"/>
+            <stop offset=".55" stop-color="#efebe3" stop-opacity=".22"/>
+            <stop offset="1" stop-color="#efebe3" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
         <g class="orbit__rings" fill="none" stroke="currentColor">
           <circle cx="320" cy="320" r="150" opacity=".10"/>
           <circle cx="320" cy="320" r="225" opacity=".07"/>
           <circle cx="320" cy="320" r="295" opacity=".05"/>
         </g>
+        <!-- phantom connections — drawn by js, fading out from the core -->
+        <g class="orbit__ghosts" id="oghosts" fill="none"></g>
         <g class="orbit__lines" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path class="oline" d="M320 320 L320 112"/>
-          <path class="oline" d="M320 320 L502 212"/>
-          <path class="oline" d="M320 320 L520 392"/>
-          <path class="oline" d="M320 320 L412 516"/>
-          <path class="oline" d="M320 320 L204 508"/>
-          <path class="oline" d="M320 320 L118 278"/>
+          <path class="oline" d="M320 320 L320 95"/>
+          <path class="oline" d="M320 320 L529 111"/>
+          <path class="oline" d="M320 320 L545 320"/>
+          <path class="oline" d="M320 320 L529 529"/>
+          <path class="oline" d="M320 320 L320 545"/>
+          <path class="oline" d="M320 320 L111 529"/>
+          <path class="oline" d="M320 320 L95 320"/>
+          <path class="oline" d="M320 320 L214 214"/>
         </g>
         <g class="orbit__packets" id="packets"></g>
         <g class="orbit__nodes">
-          <g class="onode" data-x="320" data-y="112" transform="translate(320 112)"><circle r="34"/><image href="assets/logos/googlesheets.svg" x="-13" y="-13" width="26" height="26"/><text x="0" y="-52">DOCS</text></g>
-          <g class="onode" data-x="502" data-y="212" transform="translate(502 212)"><circle r="34"/><image href="assets/logos/notion.svg" x="-13" y="-13" width="26" height="26"/><text x="52" y="-38">PM TOOL</text></g>
-          <g class="onode" data-x="520" data-y="392" transform="translate(520 392)"><circle r="34"/><image href="assets/logos/googledrive.svg" x="-13" y="-13" width="26" height="26"/><text x="58" y="16">DRIVE</text></g>
-          <g class="onode" data-x="412" data-y="516" transform="translate(412 516)"><circle r="34"/><image href="assets/logos/gmail.svg" x="-13" y="-13" width="26" height="26"/><text x="24" y="62">EMAIL</text></g>
-          <g class="onode" data-x="204" data-y="508" transform="translate(204 508)"><circle r="34"/><image href="assets/logos/slack.svg" x="-13" y="-13" width="26" height="26"/><text x="-28" y="62">CHAT</text></g>
-          <g class="onode" data-x="118" data-y="278" transform="translate(118 278)"><circle r="34"/><image href="assets/logos/googlecalendar.svg" x="-13" y="-13" width="26" height="26"/><text x="-52" y="-34">CAL</text></g>
+          <g class="onode" data-x="320" data-y="95"  transform="translate(320 95)"><circle r="34"/><image href="assets/logos/googlesheets.svg" x="-13" y="-13" width="26" height="26"/><text x="0" y="-52">DOCS</text></g>
+          <g class="onode" data-x="529" data-y="111" transform="translate(529 111)"><circle r="34"/><image href="assets/logos/bmi.svg" x="-15" y="-15" width="30" height="30"/><text x="0" y="-52">PROs</text></g>
+          <g class="onode" data-x="545" data-y="320" transform="translate(545 320)"><circle r="34"/><image href="assets/logos/notion.svg" x="-13" y="-13" width="26" height="26"/><text x="0" y="-52">PM TOOLS</text></g>
+          <g class="onode" data-x="529" data-y="529" transform="translate(529 529)"><circle r="34"/><image href="assets/logos/googledrive.svg" x="-13" y="-13" width="26" height="26"/><text x="0" y="62">DRIVE</text></g>
+          <g class="onode" data-x="320" data-y="545" transform="translate(320 545)"><circle r="34"/><image href="assets/logos/gmail.svg" x="-13" y="-13" width="26" height="26"/><text x="0" y="62">EMAIL</text></g>
+          <g class="onode" data-x="111" data-y="529" transform="translate(111 529)"><circle r="34"/><image href="assets/logos/theorchard.svg" x="-19" y="-19" width="38" height="38"/><text x="0" y="62">DISTRIBUTORS</text></g>
+          <g class="onode" data-x="95"  data-y="320" transform="translate(95 320)"><circle r="34"/><image href="assets/logos/slack.svg" x="-13" y="-13" width="26" height="26"/><text x="0" y="-52">CHAT TOOLS</text></g>
+          <g class="onode" data-x="214" data-y="214" transform="translate(214 214)"><circle r="34"/><image href="assets/logos/googlecalendar.svg" x="-13" y="-13" width="26" height="26"/><text x="0" y="-52">CALENDARS</text></g>
         </g>
         <g class="orbit__core" id="orbitCore" transform="translate(320 320)">
           <circle r="54" class="core__disc"/>
           <image class="core__mark" href="assets/logo/team-logomark-black.png" x="-22" y="-22" width="44" height="44"/>
         </g>
       </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ ACT 3.5 · THE DIFFERENCE — chat window vs Team ══════════════ -->
+<section class="pin pin--chat" id="act-chat" data-scrub="chat">
+  <div class="pin__stage stage--chat">
+    <h2 class="h2 chat__head">AI chat tools <em>answer.</em><br>Team <em>understands.</em></h2>
+    <div class="chat__panes">
+      <div class="pane pane--bot">
+        <p class="pane__bar">Generic AI chat <i>·</i> New session</p>
+        <div class="pane__body">
+          <p class="pane__q"><span id="botQ"></span><i class="caret"></i></p>
+          <p class="pane__a" id="botA"></p>
+        </div>
+        <p class="pane__tags">No memory · Resets every session · Sees only what you paste</p>
+        <div class="pane__brands" aria-label="Claude, ChatGPT, Gemini, Perplexity">
+          <img src="assets/logos/ai/claude.svg" alt="Claude">
+          <img src="assets/logos/ai/openai.svg" alt="ChatGPT">
+          <img src="assets/logos/ai/googlegemini.svg" alt="Gemini">
+          <img src="assets/logos/ai/perplexity.svg" alt="Perplexity">
+        </div>
+      </div>
+      <div class="pane pane--team">
+        <p class="pane__bar"><span class="tmate__mark"><img src="assets/logo/team-logomark-white-trim.png" alt=""></span>Team <i>·</i> Inside your operation</p>
+        <div class="pane__body">
+          <p class="pane__q"><span id="teamQ"></span><i class="caret"></i></p>
+          <div class="strata" id="strata">
+            <div class="stratum" data-stratum><b>Tools</b><span>Dropbox · Slack · Sheets · Notion · Gmail</span></div>
+            <div class="stratum" data-stratum><b>History</b><span>9 versions · 3 threads · 14 decisions</span></div>
+            <div class="stratum" data-stratum><b>People</b><span>Mix: Maya · A&amp;R: Theo · Distro: Sam</span></div>
+            <div class="stratum" data-stratum><b>Money</b><span>Vinyl PO · shoot budget · splits</span></div>
+            <div class="stratum" data-stratum><b>Dates</b><span>Embargo Fri · launch t–9w</span></div>
+          </div>
+          <div class="pane__ans" id="teamA">
+            <p><b>v10 · /Masters/Single_Master_v10.wav.</b> Approved by Maya in #audio on Tuesday.
+              The one-sheet and distributor brief already reference it. I re-briefed both when it landed at 23:41.</p>
+            <p class="pane__rcpts"><span>Dropbox ✓</span><span>#audio ✓</span><span>One-sheet ✓</span><span>Distro brief ✓</span></p>
+          </div>
+        </div>
+        <p class="pane__tags pane__tags--team">Built-in memory · Whole-business context · Already working</p>
+        <div class="pane__brands pane__brands--team">
+          <img src="assets/logo/team-logo-live.svg" alt="Team">
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -407,7 +535,7 @@
 </section>
 
 </main>
-<script src="js/main.js"></script>
+<script src="js/main.js?v=20260709f"></script>
 <!-- HIDDEN for now (per Simon, 2026-07-08): scripts for the parked lorbit/notifications hero
 <script src="js/nh-hero.js"></script>
 <script src="js/orbit-logos.js"></script> -->
