@@ -35,7 +35,7 @@ if (q.has('y')) addEventListener('load', () => {
 if (!touch && !reduced) {
   document.documentElement.classList.add('eqcur');
   const cur = $('.cursor');
-  let tx = -100, ty = -100, cx = -100, cy = -100, hinted = false;
+  let tx = -100, ty = -100, cx = -100, cy = -100;
   addEventListener('pointermove', e => { tx = e.clientX; ty = e.clientY; }, { passive: true });
   document.addEventListener('mouseover', e => {
     const t = e.target.closest('a,button,[data-hover]');
@@ -48,11 +48,6 @@ if (!touch && !reduced) {
   (function cloop() {
     cx = lerp(cx, tx, 0.55); cy = lerp(cy, ty, 0.55);
     cur.style.transform = `translate(${cx}px,${cy}px)`;
-    if (!hinted && scrollY > innerHeight * 0.7 && tx > 0) {
-      hinted = true;
-      cur.classList.add('is-hint');
-      setTimeout(() => cur.classList.remove('is-hint'), 2600);
-    }
     requestAnimationFrame(cloop);
   })();
 }
