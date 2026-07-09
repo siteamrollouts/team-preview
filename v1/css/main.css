@@ -852,3 +852,15 @@ p em{font-size:1.2em}
 .is-dawn .lrow--open{background:rgba(245,96,2,.05);border-color:rgba(245,96,2,.45)}
 .is-dawn .lrow--open span{color:var(--ink)}
 .is-dawn .lrow--open b{background:transparent;color:var(--signal);border-color:rgba(245,96,2,.55)}
+
+/* who cards — square image slides open at the top of the column on hover,
+   pushing the copy down; collapses back on leave. hover devices only. */
+.wcard__media{display:grid;grid-template-rows:0fr;
+  transition:grid-template-rows .6s var(--ease)}
+.wcard__media > div{min-height:0;overflow:hidden}
+.wcard__media img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;
+  border-radius:4px;margin-bottom:1.1rem;
+  filter:grayscale(.15) contrast(1.02)}
+@media (hover:hover){
+  .wcard:hover .wcard__media{grid-template-rows:1fr}
+}
