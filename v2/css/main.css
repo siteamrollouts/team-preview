@@ -943,3 +943,14 @@ body.menu-open .menu__list a{opacity:1;transform:none}
 
 /* scatter: dark wordmark logos render white on the glass tiles */
 .tile>img.winv{filter:brightness(0) invert(1);opacity:.92}
+
+/* ═══ beta form → CRM (2026-07-09): names row above the email row ═══ */
+.finale__form{flex-direction:column}
+.finale__names,.finale__row{display:flex;gap:.7rem}
+.finale__names input,.finale__row input{flex:1;min-width:0}
+.finale__sent{border-radius:18px}
+.finale__hp{position:absolute !important;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}
+.finale__err{display:none;font-size:.85rem;color:var(--signal);text-align:center}
+.finale__form.failed .finale__err{display:block}
+.finale__form.busy button{opacity:.6;pointer-events:none}
+@media(max-width:560px){.finale__names{flex-direction:column}}

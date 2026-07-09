@@ -24,7 +24,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/NyghtSerif-LightItalic.woff" as="font" type="font/woff" crossorigin>
 <link rel="preload" href="assets/fonts/Inter-Variable.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="css/main.css?v=20260709f">
+<link rel="stylesheet" href="css/main.css?v=20260709g">
 <!-- HIDDEN for now (per Simon, 2026-07-08): styles for the parked lorbit/notifications hero
 <link rel="stylesheet" href="css/nh-hero.css"> -->
 
@@ -520,10 +520,18 @@
   <div class="finale__inner">
     <h2 class="finale__title" data-reveal>Try it on your<br><em>next release.</em></h2>
     <p class="finale__sub" data-reveal data-delay="150">The Team beta program is now open. Sign up today.</p>
-    <form class="finale__form" data-reveal data-delay="260" onsubmit="event.preventDefault(); this.classList.add('sent')">
-      <input type="email" required placeholder="you@yourlabel.com" aria-label="Email address">
-      <button type="submit" data-hover>Sign me up</button>
+    <form class="finale__form" id="betaForm" data-reveal data-delay="260">
+      <div class="finale__names">
+        <input type="text" name="first_name" required placeholder="First name" aria-label="First name" autocomplete="given-name">
+        <input type="text" name="last_name" required placeholder="Last name" aria-label="Last name" autocomplete="family-name">
+      </div>
+      <div class="finale__row">
+        <input type="email" name="email" required placeholder="you@yourlabel.com" aria-label="Email address" autocomplete="email">
+        <button type="submit" data-hover>Sign me up</button>
+      </div>
+      <input type="text" name="website" class="finale__hp" tabindex="-1" autocomplete="off" aria-hidden="true">
       <span class="finale__sent">✳ &nbsp;You're on the list — we'll be in touch.</span>
+      <span class="finale__err">Something went wrong — please try again, or email simon@teamrollouts.com.</span>
     </form>
     <a class="finale__demo" href="https://calendly.com/teamrollouts-demo/30min" target="_blank" rel="noopener" data-hover>Book a walkthrough →</a>
   </div>
@@ -535,7 +543,7 @@
 </section>
 
 </main>
-<script src="js/main.js?v=20260709f"></script>
+<script src="js/main.js?v=20260709g"></script>
 <!-- HIDDEN for now (per Simon, 2026-07-08): scripts for the parked lorbit/notifications hero
 <script src="js/nh-hero.js"></script>
 <script src="js/orbit-logos.js"></script> -->

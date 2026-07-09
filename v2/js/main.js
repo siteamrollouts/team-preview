@@ -61,6 +61,42 @@ $$('#menu a').forEach(a => a.addEventListener('click', () => {
   burger.setAttribute('aria-expanded', false);
 }));
 
+/* ── beta form → CRM (public website-leads endpoint, source_form='beta').
+   Creates/updates the contact at admin.getteamnow.com; the endpoint is
+   upgrade-only and dedupes on email. Runs in reduced-motion mode too. ── */
+const betaForm = $('#betaForm');
+if (betaForm) betaForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (betaForm.classList.contains('busy') || betaForm.classList.contains('sent')) return;
+  const qs = new URLSearchParams(location.search);
+  const payload = {
+    source_form: 'beta',
+    first_name: betaForm.first_name.value.trim(),
+    last_name: betaForm.last_name.value.trim() || undefined,
+    email: betaForm.email.value.trim(),
+    website: betaForm.website.value,           // honeypot — humans leave it empty
+    page_url: location.href,
+    utm_source: qs.get('utm_source') || undefined,
+    utm_medium: qs.get('utm_medium') || undefined,
+    utm_campaign: qs.get('utm_campaign') || undefined,
+  };
+  betaForm.classList.add('busy');
+  betaForm.classList.remove('failed');
+  try {
+    const r = await fetch('https://admin.getteamnow.com/api/v1/website-leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!r.ok) throw new Error(`website-leads responded ${r.status}`);
+    betaForm.classList.add('sent');
+  } catch {
+    betaForm.classList.add('failed');
+  } finally {
+    betaForm.classList.remove('busy');
+  }
+});
+
 /* ── intersection reveals ── */
 const io = new IntersectionObserver(es => es.forEach(e => {
   if (!e.isIntersecting) return;
