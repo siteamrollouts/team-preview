@@ -997,3 +997,17 @@ body.menu-open .menu__list a{opacity:1;transform:none}
 
 /* connect lede: the keep-your-tools closer breathes as its own para */
 .lede--follow{margin-top:.85rem}
+
+/* ═══ cursor equalizer, take 2 (2026-07-10): each bar rides its own
+   irregular track at its own tempo — like meters on a desk, not a wave.
+   Durations are mutually prime-ish so the pattern never visibly loops. ═══ */
+@keyframes eqb1{0%,100%{transform:scaleY(.35)}14%{transform:scaleY(.9)}32%{transform:scaleY(.5)}47%{transform:scaleY(1)}63%{transform:scaleY(.4)}81%{transform:scaleY(.75)}}
+@keyframes eqb2{0%,100%{transform:scaleY(.6)}19%{transform:scaleY(.3)}38%{transform:scaleY(.95)}52%{transform:scaleY(.45)}72%{transform:scaleY(.85)}88%{transform:scaleY(.35)}}
+@keyframes eqb3{0%,100%{transform:scaleY(.45)}12%{transform:scaleY(1)}29%{transform:scaleY(.55)}48%{transform:scaleY(.8)}66%{transform:scaleY(.3)}84%{transform:scaleY(.95)}}
+@keyframes eqb4{0%,100%{transform:scaleY(.8)}16%{transform:scaleY(.4)}34%{transform:scaleY(.7)}55%{transform:scaleY(.3)}71%{transform:scaleY(1)}90%{transform:scaleY(.5)}}
+@keyframes eqb5{0%,100%{transform:scaleY(.4)}21%{transform:scaleY(.75)}37%{transform:scaleY(.35)}56%{transform:scaleY(.9)}70%{transform:scaleY(.5)}86%{transform:scaleY(1)}}
+.cursor.is-on .cursor__eq i:nth-child(1){animation:eqb1 .94s ease-in-out infinite}
+.cursor.is-on .cursor__eq i:nth-child(2){animation:eqb2 1.27s ease-in-out infinite}
+.cursor.is-on .cursor__eq i:nth-child(3){animation:eqb3 1.08s ease-in-out infinite}
+.cursor.is-on .cursor__eq i:nth-child(4){animation:eqb4 1.43s ease-in-out infinite}
+.cursor.is-on .cursor__eq i:nth-child(5){animation:eqb5 1.16s ease-in-out infinite}
